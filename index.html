@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  <link rel="stylesheet" href="style.css">
+  <title>Frontend Mentor | Calculadora de idade</title>
+</head>
+<body>
+  <main>
+    <section class="box">
+      <form class="formulario">
+        <div>
+          <label id="label_dia">DAY</label><br>
+          <input type="number" id="dia" placeholder="DD">
+          <div class="erro_vazio_dia">This field is required</div>
+          <div class="erro_validar_dia">Must be a valid day</div>
+        </div>
+        <div>
+          <label id="label_mes">MONTH</label><br>
+          <input type="number" id="mes" placeholder="MM">
+          <div class="erro_vazio_mes">This field is required</div>
+          <div class="erro_validar_mes">Must be a valid month</div>
+        </div>
+        <div>
+          <label id="label_ano">YEAR</label><br>
+          <input type="number" id="ano" placeholder="YYYY">
+          <div class="erro_vazio_ano">This field is required</div>
+          <div class="erro_validar_ano">Must be in the past</div>
+        </div>
+      </form>
+      <div class="container_botao">
+        <hr />
+        <button onclick="calcularIdade()"><img src="/assets/images/icon-arrow.svg"></button>
+      </div>
+      <p> <span class="resposta">--</span> years</p>
+      <p> <span class="resposta">--</span> months</p>
+      <p> <span class="resposta">--</span> days</p>
+      <br><br>
+    </section>
+
+  </main>
+  <footer>
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Coded by <a href="https://github.com/suelense">Suélen Euzébio</a>.
+  </footer>
+  <script src="script.js"> </script>
+</body>
+</html>
