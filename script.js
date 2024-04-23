@@ -1,109 +1,146 @@
 function getValue(id) {
-    return parseInt(document.getElementById(id).value)
+    //obtém o valor digitado no input
+    return document.getElementById(id).value;
 }
 
-function changeAttribute(className, attribute, value) {
-    document.getElementsByClassName(className)[0].style[attribute] = value
+function changeCss(className, attribute, value) {
+    //função que altera atributos no Css
+    document.getElementsByClassName(className)[0].style[attribute] = value;
 }
 
-function displayBlockAndRed(id) {
-    changeAttribute("error_empty_" + id, "display", "block");
-    changeAttribute(id, "borderColor", "#ff5757");
-    changeAttribute("label_" + id, "color","#ff5757");
+function normalBoxAttributes(messageClass, inputClass, lableClass) {
+    //retorna a formatação original
+    changeCss(messageClass, "display", "none");
+    changeCss(inputClass, "borderColor", "#716f6f");
+    changeCss(lableClass, "color", "#716f6f")
 }
 
-function displayNoneAndGray(id) {
-    changeAttribute("error_empty_" + id, "display", "none");
-    changeAttribute(id, "borderColor", "#716f6f");
-    changeAttribute("label_" + id, "color", "#716f6f");
+function errorBoxAttributes(messageClass, inputClass, lableClass) {
+    //altera a formatação quando há um erro nos dados digitados
+    changeCss(messageClass, "display", "block");
+    changeCss(inputClass, "borderColor", "#ff5757");
+    changeCss(lableClass, "color", "#ff5757")
 }
 
 function validateEmpty(id) {
     var date = getValue(id);
-    if (isNaN(date)) {
-        displayBlockAndRed(id);
+    if (isNaN(date) || date == 0) {
+        //verifica se o input está vazio
+        errorBoxAttributes("error_empty_" + id, id, "label_" + id)
+        return false;
     }
     else {
-        displayNoneAndGray(id);
+        normalBoxAttributes("error_empty_" + id, id, "label_" + id);
         return true;
     }
 }
 
-function validate31Days(day) {
-    if (day < 0 || day > 31) {
-        document.getElementsByClassName("error_validate_day")[0].style.display = "block";
-        document.getElementById("day").style.borderColor = "#ff5757";
-        document.getElementById("label_day").style.color = "#ff5757";
+function validateDaysOfMonths(expression) {
+    if (expression) {
+        //valida se o dia existe de acordo com a expressão
+        errorBoxAttributes("error_validate_day", "day", "label_day");
+        return false;
     } else {
-        document.getElementsByClassName("error_validate_day")[0].style.display = "none";
-    }
-}
-
-function validate30Days(day) {
-    if (day < 0 || day > 30) {
-        document.getElementsByClassName("error_validate_day")[0].style.display = "block";
-        document.getElementById("day").style.borderColor = "#ff5757";
-        document.getElementById("label_day").style.color = "#ff5757";
-    } else {
-        document.getElementsByClassName("error_validate_day")[0].style.display = "none";
-    }
-
-}
-
-function validateFebruary(day) {
-    if (day < 0 || day > 29) {
-        document.getElementsByClassName("error_validate_day")[0].style.display = "block";
-        document.getElementById("day").style.borderColor = "#ff5757";
-        document.getElementById("label_day").style.color = "#ff5757";
-    } else {
-        document.getElementsByClassName("error_validate_day")[0].style.display = "none";
+        normalBoxAttributes("error_validate_day", "day", "label_day");
+        return true;
     }
 }
 
 function validateDay() {
     var day = getValue("day");
     var month = getValue("month");
+    var year = getValue("year");
     var months31 = [1, 3, 5, 7, 8, 10, 12];
     if (months31.includes(month)) {
-        validate31Days(day);
+        //valida meses com 31 dias
+        return validateDaysOfMonths(day < 0 || day > 31);
     } else if (month == 2) {
-        validateFebruary(day);
+        //valida o mês de fevereiro
+        if ((year % 4 == 0 && year % 100 != 0) || (year % 4 == 0 && year % 100 == 0 && year % 400 == 0)) {
+            return validateDaysOfMonths(day < 0 || day > 29);
+        } else {
+            return validateDaysOfMonths(day < 0 || day > 28);
+        }
     } else {
-        validate30Days(day);
+        //valida meses com 30 dias
+        return validateDaysOfMonths(day < 0 || day > 30);
     }
 }
 
 function validateMonth() {
     var month = getValue("month");
-    if (month < 0 || month > 12) {
-        document.getElementsByClassName("error_validate_month")[0].style.display = "block";
-        document.getElementById("month").style.borderColor = "#ff5757";
-        document.getElementById("label_month").style.color = "#ff5757";
+    if (month < 1 || month > 12) {
+        //valida se o mês existe
+        errorBoxAttributes("error_validate_month", "month", "label_month");
+        return false;
     } else {
-        document.getElementsByClassName("error_validate_month")[0].style.display = "none";
+        normalBoxAttributes("error_validate_month", "month", "label_month");
+        return true;
     }
 }
 
 function validateFutureYear() {
+    var year = getValue("year");
     var actualDate = new Date();
     var actualYear = actualDate.getFullYear();
-    var year = getValue("year");
     if (year > actualYear) {
-        document.getElementsByClassName("error_validate_year")[0].style.display = "block";
+        //valida se o ano é anterior ou igual o atual
+        errorBoxAttributes("error_validate_year", "year", "label_year");
+        return false;
     } else {
-        document.getElementsByClassName("error_validate_year")[0].style.display = "none";
+        normalBoxAttributes("error_validate_year", "year", "label_year");
+        return true;
     }
 }
 
 function validateDate() {
+    //executa todas as validações de data
     validateEmpty("day");
     validateEmpty("month");
     validateEmpty("year");
-    validateDay();
-    validateMonth();
-    validateFutureYear();
+    if (validateEmpty("day") && validateEmpty("month") && validateEmpty("year")) {
+        validateDay();
+        validateMonth();
+        validateFutureYear();
+        if (validateDay() && validateMonth() && validateFutureYear()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 function calculateAge() {
-    validateDate();
+    var day = getValue("day");
+    var month = getValue("month");
+    var year = getValue("year");
+    var birthday = new Date(year, month - 1, day)
+    var actualDate = new Date();
+    //diferença de datas em milisegundos
+    var msDiference = actualDate.getTime() - birthday.getTime();
+    if (msDiference >= 0) {
+        var msYear = 31556952000; //milisegundos por ano
+        var msMonth = 2628000000; //milisegundos por mês
+        var msDay = 86400000; //milisegundos por dia
+        //calcula a idade
+        var ageYear = parseInt(msDiference / msYear);
+        var ageMonth = parseInt((msDiference - (ageYear * msYear)) / msMonth);
+        var ageDay = parseInt((msDiference - (ageYear * msYear) - (ageMonth * msMonth)) / msDay);
+        return { ageYear, ageMonth, ageDay };
+    } else {
+        errorBoxAttributes("error_validate_day", "day", "label_day");
+        errorBoxAttributes("error_validate_month", "month", "label_month");
+    }
+}
+
+function showResult() {
+    if (validateDate()) {
+        //se as datas forem válidas, calcula a idade
+        calculateAge();
+        let age = calculateAge();
+        //mostra a idade no html
+        document.getElementById("answerYear").innerHTML = age.ageYear;
+        document.getElementById("answerMonth").innerHTML = age.ageMonth;
+        document.getElementById("answerDay").innerHTML = age.ageDay;
+    }
 }

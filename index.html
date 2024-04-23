@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="style.css">
   <title>Frontend Mentor | Calculadora de idade</title>
 </head>
+
 <body>
   <main>
     <section class="box">
@@ -32,19 +34,22 @@
       </form>
       <div class="container_button">
         <hr />
-        <button onclick="calculateAge()"><img src="/assets/images/icon-arrow.svg"></button>
+        <button id="imageButton" onclick="showResult()"><img src="/assets/images/icon-arrow.svg"
+            alt="button arrow"></button>
+        <hr class="line" />
       </div>
-      <p> <span class="answer">--</span> years</p>
-      <p> <span class="answer">--</span> months</p>
-      <p> <span class="answer">--</span> days</p>
+      <p> <span id="answerYear" class="answer">--</span> years</p>
+      <p> <span id="answerMonth" class="answer">--</span> months</p>
+      <p> <span id="answerDay" class="answer">--</span> days</p>
       <br><br>
     </section>
 
   </main>
   <footer>
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
     Coded by <a href="https://github.com/suelense">Suélen Euzébio</a>.
   </footer>
   <script src="script.js"> </script>
 </body>
+
 </html>
